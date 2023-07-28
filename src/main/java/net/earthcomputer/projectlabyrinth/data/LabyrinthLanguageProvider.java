@@ -11,6 +11,7 @@ public class LabyrinthLanguageProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
+        addBlock(ProjectLabyrinth.GAMER_CHAIR_BLOCK, "Gamer Chair");
         addItem(ProjectLabyrinth.GAMER_JUICE_ITEM, "Gamer Juice");
 
         add("itemGroup.projectLabyrinth", "Project Labyrinth");

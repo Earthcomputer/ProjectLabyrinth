@@ -1,6 +1,7 @@
 package net.earthcomputer.projectlabyrinth;
 
 import com.mojang.logging.LogUtils;
+import net.earthcomputer.projectlabyrinth.data.LabyrinthBlockStateProvider;
 import net.earthcomputer.projectlabyrinth.data.LabyrinthItemModelProvider;
 import net.earthcomputer.projectlabyrinth.data.LabyrinthLanguageProvider;
 import net.minecraft.core.registries.Registries;
@@ -20,7 +21,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -44,8 +44,8 @@ public class ProjectLabyrinth {
     public static final DeferredRegister<VillagerProfession> VILLAGER_PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
-    public static final RegistryObject<Block> EXAMPLE_BLOCK = BLOCKS.register("example_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE)));
-    public static final RegistryObject<Item> EXAMPLE_BLOCK_ITEM = ITEMS.register("example_block", () -> new BlockItem(EXAMPLE_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<Block> GAMER_CHAIR_BLOCK = BLOCKS.register("gamer_chair", () -> new Block(BlockBehaviour.Properties.of()));
+    public static final RegistryObject<Item> GAMER_CHAIR_ITEM = ITEMS.register("gamer_chair", () -> new BlockItem(GAMER_CHAIR_BLOCK.get(), new Item.Properties()));
 
     public static final RegistryObject<Item> GAMER_JUICE_ITEM = ITEMS.register("gamer_juice", () -> new DrinkItem(new Item.Properties().food(new FoodProperties.Builder()
             .nutrition(1).saturationMod(2f).build())));
@@ -55,6 +55,7 @@ public class ProjectLabyrinth {
             .title(Component.translatable("itemGroup.projectLabyrinth"))
             .icon(() -> GAMER_JUICE_ITEM.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
+                output.accept(GAMER_CHAIR_ITEM.get());
                 output.accept(GAMER_JUICE_ITEM.get());
             }).build());
 
@@ -73,24 +74,17 @@ public class ProjectLabyrinth {
 
         MinecraftForge.EVENT_BUS.register(this);
 
-        modEventBus.addListener(this::addCreative);
-
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
     }
 
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
-            event.accept(EXAMPLE_BLOCK_ITEM);
-        }
-    }
-
     public void gatherData(GatherDataEvent event) {
         DataGenerator gen = event.getGenerator();
         ExistingFileHelper efh = event.getExistingFileHelper();
 
+        gen.addProvider(event.includeClient(), (DataProvider.Factory<LabyrinthBlockStateProvider>) output -> new LabyrinthBlockStateProvider(output, efh));
         gen.addProvider(event.includeClient(), (DataProvider.Factory<LabyrinthItemModelProvider>) output -> new LabyrinthItemModelProvider(output, efh));
         gen.addProvider(event.includeClient(), (DataProvider.Factory<LabyrinthLanguageProvider>) LabyrinthLanguageProvider::new);
     }
