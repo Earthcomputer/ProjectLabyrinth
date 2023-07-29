@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "f": {
+      "tag": "minecraft:wooden_fences"
+    },
+    "s": {
+      "tag": "minecraft:wooden_stairs"
+    },
+    "w": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    "w",
+    "s",
+    "f"
+  ],
+  "result": {
+    "item": "projectlabyrinth:gamer_chair"
+  },
+  "show_notification": true
+}

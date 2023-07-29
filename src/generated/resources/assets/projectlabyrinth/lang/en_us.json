@@ -1,5 +1,6 @@
 {
   "block.projectlabyrinth.gamer_chair": "Gamer Chair",
+  "entity.minecraft.villager.projectlabyrinth.gamer": "Gamer",
   "item.projectlabyrinth.gamer_juice": "Gamer Juice",
   "itemGroup.projectLabyrinth": "Project Labyrinth"
 }

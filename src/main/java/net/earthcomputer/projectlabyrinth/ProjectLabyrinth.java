@@ -1,5 +1,6 @@
 package net.earthcomputer.projectlabyrinth;
 
+import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
 import net.earthcomputer.projectlabyrinth.block.GamerChairBlock;
 import net.earthcomputer.projectlabyrinth.data.*;
@@ -8,20 +9,22 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.BasicItemListing;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -35,17 +38,21 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
+import java.util.Set;
+
 @Mod(ProjectLabyrinth.MODID)
 public class ProjectLabyrinth {
     public static final String MODID = "projectlabyrinth";
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+    public static final DeferredRegister<PoiType> POIS = DeferredRegister.create(ForgeRegistries.POI_TYPES, MODID);
     public static final DeferredRegister<VillagerProfession> VILLAGER_PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
     public static final RegistryObject<Block> GAMER_CHAIR_BLOCK = BLOCKS.register("gamer_chair", () -> new GamerChairBlock(BlockBehaviour.Properties.of().noOcclusion().sound(SoundType.WOOL).strength(0.8f)));
     public static final RegistryObject<Item> GAMER_CHAIR_ITEM = ITEMS.register("gamer_chair", () -> new BlockItem(GAMER_CHAIR_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<PoiType> GAMER_CHAIR_POI = POIS.register("gamer_chair", () -> new PoiType(ImmutableSet.copyOf(GAMER_CHAIR_BLOCK.get().getStateDefinition().getPossibleStates()), 1, 1));
 
     public static final RegistryObject<Item> GAMER_JUICE_ITEM = ITEMS.register("gamer_juice", () -> new DrinkItem(new Item.Properties().food(new FoodProperties.Builder()
             .nutrition(1).saturationMod(2f).build())));
@@ -59,7 +66,7 @@ public class ProjectLabyrinth {
                 output.accept(GAMER_JUICE_ITEM.get());
             }).build());
 
-//    public static final RegistryObject<VillagerProfession> GAMER_PROFESSION = VILLAGER_PROFESSIONS.register("gamer", () -> new VillagerProfession("gamer", PoiTypes.))
+    public static final RegistryObject<VillagerProfession> GAMER_PROFESSION = VILLAGER_PROFESSIONS.register("gamer", () -> new VillagerProfession("gamer", poi -> poi.is(GAMER_CHAIR_POI.getKey()), poi -> poi.is(GAMER_CHAIR_POI.getKey()), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_LIBRARIAN));
 
     public ProjectLabyrinth() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -69,6 +76,7 @@ public class ProjectLabyrinth {
 
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
+        POIS.register(modEventBus);
         VILLAGER_PROFESSIONS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
 
@@ -88,8 +96,18 @@ public class ProjectLabyrinth {
         gen.addProvider(event.includeClient(), (DataProvider.Factory<LabyrinthItemModelProvider>) output -> new LabyrinthItemModelProvider(output, efh));
         gen.addProvider(event.includeClient(), (DataProvider.Factory<LabyrinthLanguageProvider>) LabyrinthLanguageProvider::new);
 
+        gen.addProvider(event.includeServer(), (DataProvider.Factory<LabyrinthRecipeProvider>) LabyrinthRecipeProvider::new);
         gen.addProvider(event.includeServer(), (DataProvider.Factory<LabyrinthLootTableProvider>) LabyrinthLootTableProvider::new);
         gen.addProvider(event.includeServer(), (DataProvider.Factory<LabyrinthBlockTagsProvider>) output -> new LabyrinthBlockTagsProvider(output, event.getLookupProvider(), event.getExistingFileHelper()));
+        gen.addProvider(event.includeServer(), (DataProvider.Factory<LabyrinthPoiTypeTagsProvider>) output -> new LabyrinthPoiTypeTagsProvider(output, event.getLookupProvider(), event.getExistingFileHelper()));
+    }
+
+    @SubscribeEvent
+    public void onVillagerTrades(VillagerTradesEvent event) {
+        if (event.getType() == GAMER_PROFESSION.get()) {
+            event.getTrades().get(1).add(new BasicItemListing(new ItemStack(Items.COOKIE, 6), new ItemStack(Items.EMERALD), 16, 1, 0.05f));
+            event.getTrades().get(1).add(new BasicItemListing(8, new ItemStack(ProjectLabyrinth.GAMER_JUICE_ITEM.get()), 16, 1));
+        }
     }
 
     @SubscribeEvent

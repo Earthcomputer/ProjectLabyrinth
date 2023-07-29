@@ -15,5 +15,6 @@ public class LabyrinthLanguageProvider extends LanguageProvider {
         addItem(ProjectLabyrinth.GAMER_JUICE_ITEM, "Gamer Juice");
 
         add("itemGroup.projectLabyrinth", "Project Labyrinth");
+        add("entity.minecraft.villager.projectlabyrinth.gamer", "Gamer");
     }
 }
