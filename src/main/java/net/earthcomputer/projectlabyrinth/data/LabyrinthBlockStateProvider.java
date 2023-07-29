@@ -12,6 +12,7 @@ public class LabyrinthBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        simpleBlockWithItem(ProjectLabyrinth.GAMER_CHAIR_BLOCK.get(), models().getExistingFile(modLoc("gamer_chair")));
+        horizontalBlock(ProjectLabyrinth.GAMER_CHAIR_BLOCK.get(), models().getExistingFile(modLoc("gamer_chair")));
+        simpleBlockItem(ProjectLabyrinth.GAMER_CHAIR_BLOCK.get(), models().getExistingFile(modLoc("gamer_chair")));
     }
 }

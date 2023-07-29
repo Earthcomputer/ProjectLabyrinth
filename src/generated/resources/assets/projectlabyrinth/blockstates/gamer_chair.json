@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=east": {
+      "model": "projectlabyrinth:block/gamer_chair",
+      "y": 90
+    },
+    "facing=north": {
       "model": "projectlabyrinth:block/gamer_chair"
+    },
+    "facing=south": {
+      "model": "projectlabyrinth:block/gamer_chair",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "projectlabyrinth:block/gamer_chair",
+      "y": 270
     }
   }
 }

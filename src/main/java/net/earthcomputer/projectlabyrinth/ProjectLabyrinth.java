@@ -1,9 +1,9 @@
 package net.earthcomputer.projectlabyrinth;
 
 import com.mojang.logging.LogUtils;
-import net.earthcomputer.projectlabyrinth.data.LabyrinthBlockStateProvider;
-import net.earthcomputer.projectlabyrinth.data.LabyrinthItemModelProvider;
-import net.earthcomputer.projectlabyrinth.data.LabyrinthLanguageProvider;
+import net.earthcomputer.projectlabyrinth.block.GamerChairBlock;
+import net.earthcomputer.projectlabyrinth.data.*;
+import net.earthcomputer.projectlabyrinth.item.DrinkItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -15,8 +15,8 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -44,7 +44,7 @@ public class ProjectLabyrinth {
     public static final DeferredRegister<VillagerProfession> VILLAGER_PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
-    public static final RegistryObject<Block> GAMER_CHAIR_BLOCK = BLOCKS.register("gamer_chair", () -> new Block(BlockBehaviour.Properties.of()));
+    public static final RegistryObject<Block> GAMER_CHAIR_BLOCK = BLOCKS.register("gamer_chair", () -> new GamerChairBlock(BlockBehaviour.Properties.of().noOcclusion().sound(SoundType.WOOL).strength(0.8f)));
     public static final RegistryObject<Item> GAMER_CHAIR_ITEM = ITEMS.register("gamer_chair", () -> new BlockItem(GAMER_CHAIR_BLOCK.get(), new Item.Properties()));
 
     public static final RegistryObject<Item> GAMER_JUICE_ITEM = ITEMS.register("gamer_juice", () -> new DrinkItem(new Item.Properties().food(new FoodProperties.Builder()
@@ -87,6 +87,9 @@ public class ProjectLabyrinth {
         gen.addProvider(event.includeClient(), (DataProvider.Factory<LabyrinthBlockStateProvider>) output -> new LabyrinthBlockStateProvider(output, efh));
         gen.addProvider(event.includeClient(), (DataProvider.Factory<LabyrinthItemModelProvider>) output -> new LabyrinthItemModelProvider(output, efh));
         gen.addProvider(event.includeClient(), (DataProvider.Factory<LabyrinthLanguageProvider>) LabyrinthLanguageProvider::new);
+
+        gen.addProvider(event.includeServer(), (DataProvider.Factory<LabyrinthLootTableProvider>) LabyrinthLootTableProvider::new);
+        gen.addProvider(event.includeServer(), (DataProvider.Factory<LabyrinthBlockTagsProvider>) output -> new LabyrinthBlockTagsProvider(output, event.getLookupProvider(), event.getExistingFileHelper()));
     }
 
     @SubscribeEvent

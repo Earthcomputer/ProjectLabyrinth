@@ -1,4 +1,4 @@
-package net.earthcomputer.projectlabyrinth;
+package net.earthcomputer.projectlabyrinth.item;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
