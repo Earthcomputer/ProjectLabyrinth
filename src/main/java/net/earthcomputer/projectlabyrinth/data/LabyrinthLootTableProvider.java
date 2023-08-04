@@ -33,6 +33,7 @@ public class LabyrinthLootTableProvider extends LootTableProvider {
         @Override
         protected void generate() {
             dropSelf(ProjectLabyrinth.GAMER_CHAIR_BLOCK.get());
+            dropSelf(ProjectLabyrinth.PACKED_SEAGRASS_BLOCK.get());
         }
     }
 }

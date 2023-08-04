@@ -11,7 +11,7 @@ displayName="${mod_name}"
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional
 displayURL="https://github.com/Earthcomputer/ProjectLabyrinth"
 #logoFile="projectlabyrinth.png"
-credits="Ideas by: baccobaccobacco, elbrassart333, PosadoNihilist"
+credits="Ideas by: baccobaccobacco, elbrassart333, PosadoNihilist, slimel1"
 authors="${mod_authors}"
 
 description='''${mod_description}'''

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "projectlabyrinth:packed_seagrass"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "minecraft:seagrass"
+  }
+}

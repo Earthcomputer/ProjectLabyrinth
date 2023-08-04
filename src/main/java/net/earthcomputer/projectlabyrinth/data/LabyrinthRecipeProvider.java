@@ -7,6 +7,7 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Items;
 
 import java.util.function.Consumer;
 
@@ -26,5 +27,7 @@ public class LabyrinthRecipeProvider extends RecipeProvider {
             .define('f', ItemTags.WOODEN_FENCES)
             .unlockedBy("has_stairs", has(ItemTags.STAIRS))
             .save(writer);
+
+        nineBlockStorageRecipes(writer, RecipeCategory.MISC, Items.SEAGRASS, RecipeCategory.BUILDING_BLOCKS, ProjectLabyrinth.PACKED_SEAGRASS_BLOCK.get(), "projectlabyrinth:packed_seagrass", null, "projectlabyrinth:seagrass", null);
     }
 }

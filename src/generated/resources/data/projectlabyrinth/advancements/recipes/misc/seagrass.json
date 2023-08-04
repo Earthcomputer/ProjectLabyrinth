@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_packed_seagrass": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "projectlabyrinth:packed_seagrass"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "projectlabyrinth:seagrass"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_packed_seagrass",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "projectlabyrinth:seagrass"
+    ]
+  },
+  "sends_telemetry_event": false
+}

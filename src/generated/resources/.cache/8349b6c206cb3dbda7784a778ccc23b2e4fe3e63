@@ -1,3 +1,6 @@
-// 1.20.1	2023-07-29T21:10:33.096776779	Block States: projectlabyrinth
+// 1.20.1	2023-08-04T23:21:03.044776257	Block States: projectlabyrinth
 9e9a3bdc85239ab61727547bad56724247b3962c assets/projectlabyrinth/blockstates/gamer_chair.json
+c95b08f5fa613ad55a0cc69b7db708102b6f708e assets/projectlabyrinth/blockstates/packed_seagrass.json
+ef80b9e6e5253c13ddda8fa377aef9345dc9c58f assets/projectlabyrinth/models/block/packed_seagrass.json
 308baecaae9a9b0606437a91b2c5eadd985a95bc assets/projectlabyrinth/models/item/gamer_chair.json
+e8db2bdf02c930f1dc8d5a6a843dbba90ec265fd assets/projectlabyrinth/models/item/packed_seagrass.json

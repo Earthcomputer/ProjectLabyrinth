@@ -14,6 +14,8 @@ public class LabyrinthLanguageProvider extends LanguageProvider {
         addBlock(ProjectLabyrinth.GAMER_CHAIR_BLOCK, "Gamer Chair");
         addItem(ProjectLabyrinth.GAMER_JUICE_ITEM, "Gamer Juice");
 
+        addBlock(ProjectLabyrinth.PACKED_SEAGRASS_BLOCK, "Packed Seagrass");
+
         add("itemGroup.projectLabyrinth", "Project Labyrinth");
         add("entity.minecraft.villager.projectlabyrinth.gamer", "Gamer");
     }

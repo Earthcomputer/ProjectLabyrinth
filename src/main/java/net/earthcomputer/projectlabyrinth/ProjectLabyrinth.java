@@ -11,7 +11,6 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
-import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.food.FoodProperties;
@@ -19,12 +18,12 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.BasicItemListing;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
@@ -41,8 +40,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
-import java.util.Set;
-
 @Mod(ProjectLabyrinth.MODID)
 public class ProjectLabyrinth {
     public static final String MODID = "projectlabyrinth";
@@ -57,6 +54,9 @@ public class ProjectLabyrinth {
     public static final RegistryObject<Item> GAMER_CHAIR_ITEM = ITEMS.register("gamer_chair", () -> new BlockItem(GAMER_CHAIR_BLOCK.get(), new Item.Properties()));
     public static final RegistryObject<PoiType> GAMER_CHAIR_POI = POIS.register("gamer_chair", () -> new PoiType(ImmutableSet.copyOf(GAMER_CHAIR_BLOCK.get().getStateDefinition().getPossibleStates()), 1, 1));
 
+    public static final RegistryObject<Block> PACKED_SEAGRASS_BLOCK = BLOCKS.register("packed_seagrass", () -> new Block(BlockBehaviour.Properties.of().sound(SoundType.WET_GRASS).pushReaction(PushReaction.DESTROY)));
+    public static final RegistryObject<Item> PACKED_SEAGRASS_ITEM = ITEMS.register("packed_seagrass", () -> new BlockItem(PACKED_SEAGRASS_BLOCK.get(), new Item.Properties()));
+
     public static final RegistryObject<Item> GAMER_JUICE_ITEM = ITEMS.register("gamer_juice", () -> new DrinkItem(new Item.Properties().food(new FoodProperties.Builder()
             .nutrition(1).saturationMod(2f).build())));
 
@@ -67,6 +67,7 @@ public class ProjectLabyrinth {
             .displayItems((parameters, output) -> {
                 output.accept(GAMER_CHAIR_ITEM.get());
                 output.accept(GAMER_JUICE_ITEM.get());
+                output.accept(PACKED_SEAGRASS_ITEM.get());
             }).build());
 
     public static final RegistryObject<VillagerProfession> GAMER_PROFESSION = VILLAGER_PROFESSIONS.register("gamer", () -> new VillagerProfession("gamer", poi -> poi.is(GAMER_CHAIR_POI.getKey()), poi -> poi.is(GAMER_CHAIR_POI.getKey()), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_LIBRARIAN));
