@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
@@ -23,6 +24,8 @@ import net.minecraftforge.common.BasicItemListing;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -107,6 +110,15 @@ public class ProjectLabyrinth {
         if (event.getType() == GAMER_PROFESSION.get()) {
             event.getTrades().get(1).add(new BasicItemListing(new ItemStack(Items.COOKIE, 6), new ItemStack(Items.EMERALD), 16, 1, 0.05f));
             event.getTrades().get(1).add(new BasicItemListing(8, new ItemStack(ProjectLabyrinth.GAMER_JUICE_ITEM.get()), 16, 1));
+        }
+    }
+
+    @SubscribeEvent
+    public void onLivingTick(LivingEvent.LivingTickEvent event) {
+        if (event.getEntity() instanceof Villager villager) {
+            if (!villager.level().isClientSide && villager.getVillagerData().getProfession() == GAMER_PROFESSION.get() && villager.isSunBurnTick()) {
+                villager.setSecondsOnFire(8);
+            }
         }
     }
 
