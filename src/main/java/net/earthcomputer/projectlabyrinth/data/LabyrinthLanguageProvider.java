@@ -1,6 +1,9 @@
 package net.earthcomputer.projectlabyrinth.data;
 
 import net.earthcomputer.projectlabyrinth.ProjectLabyrinth;
+import net.earthcomputer.projectlabyrinth.block.LabyrinthBlocks;
+import net.earthcomputer.projectlabyrinth.entity.LabyrinthEntities;
+import net.earthcomputer.projectlabyrinth.item.LabyrinthItems;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
 
@@ -11,12 +14,12 @@ public class LabyrinthLanguageProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        addBlock(ProjectLabyrinth.GAMER_CHAIR_BLOCK, "Gamer Chair");
-        addItem(ProjectLabyrinth.GAMER_JUICE_ITEM, "Gamer Juice");
+        addBlock(LabyrinthBlocks.GAMER_CHAIR, "Gamer Chair");
+        addItem(LabyrinthItems.GAMER_JUICE, "Gamer Juice");
 
-        addBlock(ProjectLabyrinth.PACKED_SEAGRASS_BLOCK, "Packed Seagrass");
+        addBlock(LabyrinthBlocks.PACKED_SEAGRASS, "Packed Seagrass");
 
-        addEntityType(ProjectLabyrinth.SENTIENT_PISTON_ENTITY, "Sentient Piston");
+        addEntityType(LabyrinthEntities.SENTIENT_PISTON, "Sentient Piston");
 
         add("itemGroup.projectLabyrinth", "Project Labyrinth");
         add("entity.minecraft.villager.projectlabyrinth.gamer", "Gamer");

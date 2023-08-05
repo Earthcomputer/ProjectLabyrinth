@@ -1,6 +1,7 @@
 package net.earthcomputer.projectlabyrinth.data;
 
 import net.earthcomputer.projectlabyrinth.ProjectLabyrinth;
+import net.earthcomputer.projectlabyrinth.block.LabyrinthBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
@@ -17,6 +18,6 @@ public class LabyrinthBlockTagsProvider extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
-        tag(BlockTags.MINEABLE_WITH_AXE).add(ProjectLabyrinth.GAMER_CHAIR_BLOCK.get());
+        tag(BlockTags.MINEABLE_WITH_AXE).add(LabyrinthBlocks.GAMER_CHAIR.get());
     }
 }

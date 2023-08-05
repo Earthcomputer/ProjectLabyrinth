@@ -1,6 +1,7 @@
 package net.earthcomputer.projectlabyrinth.data;
 
-import net.earthcomputer.projectlabyrinth.ProjectLabyrinth;
+import net.earthcomputer.projectlabyrinth.block.LabyrinthBlocks;
+import net.earthcomputer.projectlabyrinth.item.LabyrinthItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -18,7 +19,7 @@ public class LabyrinthRecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> writer) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ProjectLabyrinth.GAMER_CHAIR_ITEM.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, LabyrinthItems.GAMER_CHAIR.get())
             .pattern("w")
             .pattern("s")
             .pattern("f")
@@ -28,6 +29,6 @@ public class LabyrinthRecipeProvider extends RecipeProvider {
             .unlockedBy("has_stairs", has(ItemTags.STAIRS))
             .save(writer);
 
-        nineBlockStorageRecipes(writer, RecipeCategory.MISC, Items.SEAGRASS, RecipeCategory.BUILDING_BLOCKS, ProjectLabyrinth.PACKED_SEAGRASS_BLOCK.get(), "projectlabyrinth:packed_seagrass", null, "projectlabyrinth:seagrass", null);
+        nineBlockStorageRecipes(writer, RecipeCategory.MISC, Items.SEAGRASS, RecipeCategory.BUILDING_BLOCKS, LabyrinthBlocks.PACKED_SEAGRASS.get(), "projectlabyrinth:packed_seagrass", null, "projectlabyrinth:seagrass", null);
     }
 }

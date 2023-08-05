@@ -1,6 +1,7 @@
 package net.earthcomputer.projectlabyrinth.data;
 
 import net.earthcomputer.projectlabyrinth.ProjectLabyrinth;
+import net.earthcomputer.projectlabyrinth.block.LabyrinthPOIs;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.PoiTypeTagsProvider;
@@ -17,6 +18,6 @@ public class LabyrinthPoiTypeTagsProvider extends PoiTypeTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
-        tag(PoiTypeTags.ACQUIRABLE_JOB_SITE).add(ProjectLabyrinth.GAMER_CHAIR_POI.getKey());
+        tag(PoiTypeTags.ACQUIRABLE_JOB_SITE).add(LabyrinthPOIs.GAMER_CHAIR.getKey());
     }
 }

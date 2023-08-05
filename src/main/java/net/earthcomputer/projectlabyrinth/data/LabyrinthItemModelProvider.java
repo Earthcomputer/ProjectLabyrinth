@@ -1,6 +1,7 @@
 package net.earthcomputer.projectlabyrinth.data;
 
 import net.earthcomputer.projectlabyrinth.ProjectLabyrinth;
+import net.earthcomputer.projectlabyrinth.item.LabyrinthItems;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -12,6 +13,6 @@ public class LabyrinthItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        basicItem(ProjectLabyrinth.GAMER_JUICE_ITEM.get());
+        basicItem(LabyrinthItems.GAMER_JUICE.get());
     }
 }
