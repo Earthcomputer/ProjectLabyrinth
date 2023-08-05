@@ -16,6 +16,8 @@ public class LabyrinthLanguageProvider extends LanguageProvider {
 
         addBlock(ProjectLabyrinth.PACKED_SEAGRASS_BLOCK, "Packed Seagrass");
 
+        addEntityType(ProjectLabyrinth.SENTIENT_PISTON_ENTITY, "Sentient Piston");
+
         add("itemGroup.projectLabyrinth", "Project Labyrinth");
         add("entity.minecraft.villager.projectlabyrinth.gamer", "Gamer");
     }

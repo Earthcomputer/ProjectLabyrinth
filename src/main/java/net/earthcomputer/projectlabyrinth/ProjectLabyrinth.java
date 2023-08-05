@@ -4,12 +4,17 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
 import net.earthcomputer.projectlabyrinth.block.GamerChairBlock;
 import net.earthcomputer.projectlabyrinth.data.*;
+import net.earthcomputer.projectlabyrinth.entity.SentientPistonEntity;
+import net.earthcomputer.projectlabyrinth.entity.SentientPistonModel;
+import net.earthcomputer.projectlabyrinth.entity.SentientPistonRenderer;
 import net.earthcomputer.projectlabyrinth.item.DrinkItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -20,10 +25,12 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.BasicItemListing;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
@@ -49,6 +56,7 @@ public class ProjectLabyrinth {
     public static final DeferredRegister<PoiType> POIS = DeferredRegister.create(ForgeRegistries.POI_TYPES, MODID);
     public static final DeferredRegister<VillagerProfession> VILLAGER_PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);
 
     public static final RegistryObject<Block> GAMER_CHAIR_BLOCK = BLOCKS.register("gamer_chair", () -> new GamerChairBlock(BlockBehaviour.Properties.of().noOcclusion().sound(SoundType.WOOL).strength(0.8f)));
     public static final RegistryObject<Item> GAMER_CHAIR_ITEM = ITEMS.register("gamer_chair", () -> new BlockItem(GAMER_CHAIR_BLOCK.get(), new Item.Properties()));
@@ -72,17 +80,21 @@ public class ProjectLabyrinth {
 
     public static final RegistryObject<VillagerProfession> GAMER_PROFESSION = VILLAGER_PROFESSIONS.register("gamer", () -> new VillagerProfession("gamer", poi -> poi.is(GAMER_CHAIR_POI.getKey()), poi -> poi.is(GAMER_CHAIR_POI.getKey()), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_LIBRARIAN));
 
+    public static final RegistryObject<EntityType<SentientPistonEntity>> SENTIENT_PISTON_ENTITY = ENTITIES.register("sentient_piston", () -> EntityType.Builder.of(SentientPistonEntity::new, MobCategory.MONSTER).sized(0.98f, 1.98f).clientTrackingRange(8).build("projectlabyrinth:sentient_piston"));
+
     public ProjectLabyrinth() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::gatherData);
+        modEventBus.addListener(this::registerMobAttributes);
 
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
         POIS.register(modEventBus);
         VILLAGER_PROFESSIONS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
+        ENTITIES.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
 
@@ -104,6 +116,10 @@ public class ProjectLabyrinth {
         gen.addProvider(event.includeServer(), (DataProvider.Factory<LabyrinthLootTableProvider>) LabyrinthLootTableProvider::new);
         gen.addProvider(event.includeServer(), (DataProvider.Factory<LabyrinthBlockTagsProvider>) output -> new LabyrinthBlockTagsProvider(output, event.getLookupProvider(), event.getExistingFileHelper()));
         gen.addProvider(event.includeServer(), (DataProvider.Factory<LabyrinthPoiTypeTagsProvider>) output -> new LabyrinthPoiTypeTagsProvider(output, event.getLookupProvider(), event.getExistingFileHelper()));
+    }
+
+    private void registerMobAttributes(EntityAttributeCreationEvent event) {
+        event.put(SENTIENT_PISTON_ENTITY.get(), SentientPistonEntity.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -131,6 +147,16 @@ public class ProjectLabyrinth {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+        }
+
+        @SubscribeEvent
+        public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+            event.registerEntityRenderer(SENTIENT_PISTON_ENTITY.get(), SentientPistonRenderer::new);
+        }
+
+        @SubscribeEvent
+        public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+            event.registerLayerDefinition(SentientPistonModel.LAYER_LOCATION, SentientPistonModel::createBodyLayer);
         }
     }
 }
